@@ -1,12 +1,14 @@
 package com.example.banhangonline.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             ActionViewFlipper();
             getLoaiSanPham();
             getSpMoi();
+            getEventClick();
         }else {
             Toast.makeText(getApplicationContext(), "Không có internet, vui lòng kết nối", Toast.LENGTH_LONG).show();
         }
@@ -78,6 +81,37 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void getEventClick() {
+        listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                switch (i){
+                    case 0:
+                        Intent trangchu = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(trangchu);
+                        break;
+                    case 1:
+                        Intent dienthoai = new Intent(getApplicationContext(), DienThoaiActivity.class);
+                        dienthoai.putExtra("loai",1);
+                        startActivity(dienthoai);
+                        break;
+                    case 2:
+                        Intent laptop = new Intent(getApplicationContext(), LaptopActivity.class);
+                        startActivity(laptop);
+                        break;
+                    case 3:
+                        Intent thongtin = new Intent(getApplicationContext(), ThongTinActivity.class);
+                        startActivity(thongtin);
+                        break;
+                    case 4:
+                        Intent lienhe = new Intent(getApplicationContext(), LienHeActivity.class);
+                        startActivity(lienhe);
+                        break;
+                }
+            }
         });
     }
 

@@ -5,6 +5,7 @@ public class SanPhamMoi {
     String tensp;
     String hinhanh;
     String giasp;
+    String mota;
     int loai;
 
     public int getId() {
@@ -38,6 +39,7 @@ public class SanPhamMoi {
     public void setGiasp(String giasp) {
         this.giasp = giasp;
     }
+    public String getMota(){ return mota; }
 
     public int getLoai() {
         return loai;
