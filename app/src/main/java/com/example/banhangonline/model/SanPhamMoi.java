@@ -1,6 +1,8 @@
 package com.example.banhangonline.model;
 
-public class SanPhamMoi {
+import java.io.Serializable;
+
+public class SanPhamMoi implements Serializable { // sửa lỗi
     int id;
     String tensp;
     String hinhanh;

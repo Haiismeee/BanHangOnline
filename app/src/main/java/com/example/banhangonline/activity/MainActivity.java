@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(dienthoai);
                         break;
                     case 2:
-                        Intent laptop = new Intent(getApplicationContext(), LaptopActivity.class);
+                        Intent laptop = new Intent(getApplicationContext(), DienThoaiActivity.class);
+                        laptop.putExtra("loai",2);
                         startActivity(laptop);
                         break;
                     case 3:
@@ -197,7 +198,9 @@ public class MainActivity extends AppCompatActivity {
         //khởi tạo list
         mangloaisp = new ArrayList<>();
         mangSpMoi = new ArrayList<>();
-
+        if(Utils.manggiohang == null){
+            Utils.manggiohang = new ArrayList<>();
+        }
     }
     private boolean isConnected(Context context){
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
