@@ -1,9 +1,11 @@
 package com.example.banhangonline.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,37 +58,32 @@ public class ChiTietActivity extends AppCompatActivity {
     }
 
     private void themGioHang() {
-        if (Utils.manggiohang.size() > 0){
-            boolean flag = false;
-            int soluong = Integer.parseInt(spinner.getSelectedItem().toString());
-            for (int i = 0; i< Utils.manggiohang.size(); i++){
-                if(Utils.manggiohang.get(i).getIdsp() == sanPhamMoi.getId()){
-                    long gia = cleanAndParseLong(sanPhamMoi.getGiasp()) * Utils.manggiohang.get(i).getSoluong();
-                    Utils.manggiohang.get(i).setGiasp(gia);
-                    flag = true;
-                }
+        int soluong = Integer.parseInt(spinner.getSelectedItem().toString());
+        boolean flag = false;
+        // Loại bỏ các ký tự không phải số khỏi chuỗi giá sản phẩm
+        long giaSanPham = Long.parseLong(sanPhamMoi.getGiasp().replaceAll("[^\\d]", ""));
+
+        for (int i = 0; i < Utils.manggiohang.size(); i++) {
+            if (Utils.manggiohang.get(i).getIdsp() == sanPhamMoi.getId()) {
+                Utils.manggiohang.get(i).setSoluong(Utils.manggiohang.get(i).getSoluong() + soluong);
+                Utils.manggiohang.get(i).setGiasp(giaSanPham * Utils.manggiohang.get(i).getSoluong());
+                flag = true;
+                break;
             }
-            if (flag == false){
-                long gia = cleanAndParseLong(sanPhamMoi.getGiasp()) * soluong;
-                GioHang gioHang = new GioHang();
-                gioHang.setGiasp(gia);
-                gioHang.setSoluong(soluong);
-                gioHang.setIdsp(sanPhamMoi.getId());
-                gioHang.setHinhsp(sanPhamMoi.getHinhanh());
-                Utils.manggiohang.add(gioHang); // add vao mang
-            }
-        }else{
-            int soluong = Integer.parseInt(spinner.getSelectedItem().toString());
-            long gia = cleanAndParseLong(sanPhamMoi.getGiasp()) * soluong;
+        }
+        if (!flag) {
+            long gia = giaSanPham * soluong;
             GioHang gioHang = new GioHang();
             gioHang.setGiasp(gia);
             gioHang.setSoluong(soluong);
             gioHang.setIdsp(sanPhamMoi.getId());
             gioHang.setHinhsp(sanPhamMoi.getHinhanh());
-            Utils.manggiohang.add(gioHang); // add vao mang
+            gioHang.setTensp(sanPhamMoi.getTensp());
+            Utils.manggiohang.add(gioHang); // add vào mảng
         }
         badge.setText(String.valueOf(Utils.manggiohang.size()));
     }
+
 
     private long cleanAndParseLong(String giasp) {
         // Loại bỏ các ký tự không phải số (trừ dấu thập phân nếu cần)
@@ -115,8 +112,20 @@ public class ChiTietActivity extends AppCompatActivity {
         imghinhanh = findViewById(R.id.imgchitiet);
         toolbar = findViewById(R.id.toobar);
         badge = findViewById(R.id.menu_sl);
+        FrameLayout frameLayoutgiohang = findViewById(R.id.framegiohang);
+        frameLayoutgiohang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent giohang = new Intent(getApplicationContext(), GioHangActivity.class);
+                startActivity(giohang);
+            }
+        });
         if (Utils.manggiohang != null){
-            badge.setText(String.valueOf(Utils.manggiohang.size()));
+            int totalItem = 0;
+            for (int i=0; i<Utils.manggiohang.size(); i++){
+                totalItem = totalItem+ Utils.manggiohang.get(i).getSoluong();
+            }
+            badge.setText(String.valueOf(totalItem));
         }
     }
 
